@@ -1,0 +1,49 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average housing price for Suburbs (2016 - 2017)",
+  "width": 400,
+  "height": 400,
+  "projection": {"type": "mercator"},
+  "layer": [
+    {
+    "data": {
+      "url": "vic_localities.json",
+      "format": {"type": "topojson", "feature": "vic_localities"}
+    },
+    "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+  },
+  {
+  "data": {
+    "url": "vic_localities.json",
+    "format": {"type": "topojson", "feature": "vic_localities"}
+  },
+  "transform": [
+    {
+      "lookup": "properties.LOC_NAME",
+      "from": {
+        "data": {
+          "url": "data/otherone.csv"
+        },
+        "key": "Suburb",
+        "fields": ["Prices"]
+      }
+    }
+  ],
+  "mark": {"type": "geoshape"},
+  "encoding": {
+    "color": {
+      "field": "Prices",
+      "type": "quantitative",
+      "scale": {
+        "type": "threshold",
+        "domain": [500000, 1000000, 1500000],
+        "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#a63603"]
+      }
+    },
+    "tooltip": [
+      {"field": "properties.LOC_NAME", "type": "nominal", "title": "Suburb"},
+      {"field": "Prices", "type": "quantitative", "title": "Average house Price"}
+    ]
+  }
+}]
+}
